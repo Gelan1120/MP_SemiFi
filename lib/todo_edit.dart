@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sfpracexam/httpservice.dart';
 import 'package:sfpracexam/todo_model.dart';
 
 class Todo_Edit extends StatefulWidget {
@@ -16,90 +15,73 @@ class Todo_Edit extends StatefulWidget {
 
 class _Todo_EditState extends State<Todo_Edit> {
 
-  var formKey = GlobalKey<FormState>();
+  late final TextEditingController _controller = TextEditingController(text: widget.todos.title);
+  final _formKey = GlobalKey<FormState>();
 
-  TextEditingController id = TextEditingController();
-  TextEditingController title = TextEditingController();
-  TextEditingController completed = TextEditingController();
-
-  late HttpService httpService = HttpService();
+  // late bool completed = widget.todos.completed;
+  //
+  // String setComplete() {
+  //   if (completed == true) {
+  //     return "Completed";
+  //   }
+  //   else {
+  //     return "Ongoing";
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo Details'),
+        title: const Text('Todo Update'),
       ),
+      body: Container(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _controller,
+                  keyboardType: TextInputType.text,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Todo Title",
+                  ),
+                  validator: (value) {
+                    return value == null || value.isEmpty ?
+                    "Input todo" : null;
+                  },
+                ),
+              ),
+              const SizedBox(height: 80),
+              SizedBox(
+                width: 200,
+                height: 40,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        var updateTodo = Todo(
+                            id: widget.todos.id,
+                            userId: widget.todos.userId,
+                            title: _controller.text,
+                            completed: widget.todos.completed
+                        );
 
-      body: FutureBuilder(
-          future: httpService.getTodos(),
-          builder: (BuildContext context, AsyncSnapshot<List<Todo>> snapshot){
-
-            if(snapshot.hasData){
-              List<Todo>? todos = snapshot.data;
-
-              return ListView(
-                children: todos!
-                    .map((Todo todos) => Form(
-                    key: formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Container(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: title,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                                labelText: todos.title,
-                                hintText: 'Todos'
-                            ),
-                            validator: (value) {
-                              return (value == '') ? "Please enter a value": null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: id,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                                labelText: todos.id.toString(),
-                                hintText: 'Id'
-                            ),
-                            validator: (value) {
-                              return (value == '') ? "Please enter a value": null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: completed,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                                labelText: todos.completed.toString(),
-                                hintText: 'Completed'
-                            ),
-                            validator: (value) {
-                              return (value == '') ? "Please enter a value": null;
-                            },
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                httpService = httpService.putTodo(title.text) as HttpService;
-                              });
-                            },
-                            child: const Text('Update Data'),
-                          ),
-                        ],
-                      ),
-                    )
-                )
-                ).toList(),
-              );
-
-            }
-
-            return const CircularProgressIndicator();
-          }
-      )
-    );
+                        Navigator.pop(context, updateTodo);
+                      }
+                    },
+                    child: const Text("Update Task")
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      );
   }
 }
+

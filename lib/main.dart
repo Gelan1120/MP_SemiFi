@@ -8,6 +8,6 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.brown
     ),
-    home: Home(),
+    home: const Home(),
   ));
 }

@@ -4,6 +4,7 @@ import 'package:sfpracexam/todo_edit.dart';
 import 'package:sfpracexam/todo_model.dart';
 
 class Home extends StatefulWidget {
+
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -13,7 +14,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   final HttpService httpService = HttpService();
-  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

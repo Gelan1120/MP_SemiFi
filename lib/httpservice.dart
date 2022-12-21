@@ -22,7 +22,7 @@ class HttpService{
 
   }
 
-  Future<Todo> putTodo(String title) async {
+  Future<Todo> updateTodos(String title) async {
     final Response response = await put(Uri.parse('https://jsonplaceholder.typicode.com/todos/id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -38,7 +38,6 @@ class HttpService{
       throw Exception('Failed to update todo.');
     }
   }
-
 
 
 
