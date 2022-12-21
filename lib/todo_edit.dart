@@ -18,16 +18,6 @@ class _Todo_EditState extends State<Todo_Edit> {
   late final TextEditingController _controller = TextEditingController(text: widget.todos.title);
   final _formKey = GlobalKey<FormState>();
 
-  // late bool completed = widget.todos.completed;
-  //
-  // String setComplete() {
-  //   if (completed == true) {
-  //     return "Completed";
-  //   }
-  //   else {
-  //     return "Ongoing";
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
